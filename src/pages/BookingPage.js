@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './BookingPage.css';
 import { db } from '../firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import Chatbot from './Chatbot';
 import { FaRobot } from 'react-icons/fa';
@@ -18,6 +18,7 @@ const BookingPage = () => {
   });
   const [bookingCode, setBookingCode] = useState("");
   const [bookingInfo, setBookingInfo] = useState(null);
+  const [specialties, setSpecialties] = useState([]);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -79,6 +80,14 @@ const BookingPage = () => {
       setBookingInfo('error');
     }
   };
+
+  useEffect(() => {
+    async function fetchSpecialties() {
+      const querySnapshot = await getDocs(collection(db, "specialties"));
+      setSpecialties(querySnapshot.docs.map(doc => doc.data().name));
+    }
+    fetchSpecialties();
+  }, []);
 
   function FloatingChatbot() {
     const [open, setOpen] = useState(false);
@@ -145,9 +154,15 @@ const BookingPage = () => {
               <label>Chuyên khoa:</label>
               <select name="department" value={formData.department} onChange={handleChange} required>
                 <option value="">-- Chọn chuyên khoa --</option>
-                <option value="Nội tổng quát">Nội tổng quát</option>
-                <option value="Tai mũi họng">Tai mũi họng</option>
-                <option value="Da liễu">Da liễu</option>
+                {specialties.length > 0 ? specialties.map((name, idx) => (
+                  <option key={idx} value={name}>{name}</option>
+                )) : (
+                  <>
+                    <option value="Nội tổng quát">Nội tổng quát</option>
+                    <option value="Tai mũi họng">Tai mũi họng</option>
+                    <option value="Da liễu">Da liễu</option>
+                  </>
+                )}
               </select>
             </div>
           </div>
