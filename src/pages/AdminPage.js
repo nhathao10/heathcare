@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { FaHome, FaEdit, FaChartBar, FaStethoscope } from 'react-icons/fa';
+import { FaHome, FaEdit, FaChartBar, FaStethoscope, FaUserMd } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import "./AdminPage.css";
 
@@ -100,6 +100,11 @@ export default function AdminPage() {
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/admin/specialties' ? ' active' : ''}`} onClick={() => navigate('/admin/specialties')}>
                 <FaStethoscope style={{marginRight: 8}} /> Quản lý chuyên khoa
+              </button>
+            </li>
+            <li>
+              <button className={`sidebar-menu-btn${location.pathname === '/admin/doctors' ? ' active' : ''}`} onClick={() => navigate('/admin/doctors')}>
+                <FaUserMd style={{marginRight: 8}} /> Quản lý bác sĩ
               </button>
             </li>
           </ul>

@@ -10,6 +10,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom"; // ✅ Thêm dòng này
 import Chatbot from "./Chatbot";
 import { FaRobot } from 'react-icons/fa';
+import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Home() {
   const navigate = useNavigate(); // ✅ Dòng mới: khởi tạo điều hướng
@@ -34,13 +36,6 @@ export default function Home() {
       })
       .catch(() => setNewsError(true));
   }, []);
-
-  // Hàm lấy link ảnh đầu tiên từ description
-  function extractImageFromDescription(desc) {
-    if (!desc) return null;
-    const match = desc.match(/<img[^>]+src=["']([^"'>]+)["']/i);
-    return match ? match[1] : null;
-  }
 
   const newsSliderSettings = {
     dots: true,
@@ -112,6 +107,22 @@ export default function Home() {
       </>
     );
   }
+
+  // Đội ngũ bác sĩ động từ Firestore
+  const [doctors, setDoctors] = useState([]);
+  const [specialties, setSpecialties] = useState([]);
+  useEffect(() => {
+    async function fetchDoctors() {
+      const querySnapshot = await getDocs(collection(db, "doctors"));
+      setDoctors(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }
+    async function fetchSpecialties() {
+      const querySnapshot = await getDocs(collection(db, "specialties"));
+      setSpecialties(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }
+    fetchDoctors();
+    fetchSpecialties();
+  }, []);
 
   return (
     <div className="home-wrapper">
@@ -220,44 +231,36 @@ export default function Home() {
           Đội ngũ bác sĩ
         </h2>
         <Row>
-          {[
-            {
-              name: "BS. Nguyễn Văn A",
-              specialty: "Nội khoa",
-              img: "https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&w=400&q=80",
-              desc: "Chuyên gia nội tổng quát, hơn 15 năm kinh nghiệm, từng tu nghiệp tại Pháp.",
-            },
-            {
-              name: "BS. Trần Thị B",
-              specialty: "Nhi khoa",
-              img: "https://images.pexels.com/photos/8460036/pexels-photo-8460036.jpeg?auto=compress&w=400&q=80",
-              desc: "Bác sĩ nhi giàu kinh nghiệm, tận tâm với trẻ nhỏ, tư vấn dinh dưỡng khoa học.",
-            },
-            {
-              name: "BS. Lê Văn C",
-              specialty: "Tư vấn tâm lý",
-              img: "https://images.pexels.com/photos/8376293/pexels-photo-8376293.jpeg?auto=compress&w=400&q=80",
-              desc: "Chuyên gia tâm lý, hỗ trợ sức khỏe tinh thần, từng công tác tại bệnh viện lớn.",
-            },
-          ].map((doctor, index) => (
-            <Col md={4} className="mb-4" key={index} data-aos="fade-up">
+          {doctors.length > 0 ? doctors.map((doctor, index) => (
+            <Col md={4} className="mb-4" key={doctor.id} data-aos="fade-up">
               <Card className="doctor-card h-100 text-center shadow-lg">
                 <Card.Img
                   variant="top"
-                  src={doctor.img}
+                  src={doctor.image || "/images.jpg"}
                   className="doctor-img"
-                  alt={doctor.name + " - " + doctor.specialty}
+                  alt={doctor.name}
                 />
                 <Card.Body>
                   <Card.Title>{doctor.name}</Card.Title>
-                  <div className="text-secondary mb-2">{doctor.specialty}</div>
-                  <Card.Text style={{ fontSize: "0.98rem" }}>
-                    {doctor.desc}
-                  </Card.Text>
+                  <div className="text-secondary mb-2">
+                    {specialties.find(s => s.id === doctor.specialtyId)?.name || ""}
+                  </div>
+                  {doctor.workTime && (
+                    <div className="mb-1" style={{fontSize: '0.98rem'}}>
+                      <b>Thời gian làm việc:</b> {doctor.workTime}
+                    </div>
+                  )}
+                  {doctor.experience && (
+                    <div className="mb-2" style={{fontSize: '0.98rem'}}>
+                      <b>Kinh nghiệm:</b> {doctor.experience}
+                    </div>
+                  )}
                 </Card.Body>
               </Card>
             </Col>
-          ))}
+          )) : (
+            <Col md={12} className="text-center text-muted">Chưa có bác sĩ nào.</Col>
+          )}
         </Row>
       </Container>
 

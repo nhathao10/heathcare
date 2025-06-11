@@ -4,6 +4,7 @@ import BookingPage from "./pages/BookingPage";
 import AdminPage from "./pages/AdminPage";
 import AdminStatsPage from "./pages/AdminStatsPage";
 import AdminSpecialtiesPage from "./pages/AdminSpecialtiesPage";
+import AdminDoctorsPage from "./pages/AdminDoctorsPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/stats" element={<AdminStatsPage />} />
         <Route path="/admin/specialties" element={<AdminSpecialtiesPage />} />
+        <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
       </Routes>
     </Router>
   );
