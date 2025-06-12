@@ -165,7 +165,7 @@ export default function Home() {
               <li>Đội ngũ bác sĩ chuyên môn cao</li>
               <li>Dịch vụ nhanh chóng – an toàn – hiệu quả</li>
             </ul>
-            <Button className="glow-button mt-3">Tìm hiểu thêm</Button>
+            <Button className="glow-button mt-3" onClick={() => navigate("/gioi-thieu")}>Tìm hiểu thêm</Button>
           </Col>
         </Row>
       </Container>
@@ -497,14 +497,11 @@ export default function Home() {
           >
             <div className="contact-section h-100 d-flex flex-column justify-content-center">
               <h2 className="text-gradient mb-3">Liên hệ với chúng tôi</h2>
-              <p>Địa chỉ: 123 Đường Sức Khỏe, Quận Y Tế, TP. Hạnh Phúc</p>
+              <p>Địa chỉ: 66 Yên Lãng, Quận Thủ Đức, TP. Hồ Chí Minh</p>
               <p>
                 Hotline: <strong>1900 123 456</strong> | Email:
-                contact@ytcc.com.vn
+                nhathao@ytcd.com.vn
               </p>
-              <Button variant="outline-info" className="mt-3 align-self-center">
-                Gửi phản hồi
-              </Button>
             </div>
           </Col>
         </Row>

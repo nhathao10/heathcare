@@ -5,6 +5,7 @@ import AdminPage from "./pages/AdminPage";
 import AdminStatsPage from "./pages/AdminStatsPage";
 import AdminSpecialtiesPage from "./pages/AdminSpecialtiesPage";
 import AdminDoctorsPage from "./pages/AdminDoctorsPage";
+import AboutPage from "./pages/AboutPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin/stats" element={<AdminStatsPage />} />
         <Route path="/admin/specialties" element={<AdminSpecialtiesPage />} />
         <Route path="/admin/doctors" element={<AdminDoctorsPage />} />
+        <Route path="/gioi-thieu" element={<AboutPage />} />
       </Routes>
     </Router>
   );

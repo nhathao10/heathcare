@@ -57,16 +57,11 @@ export default function Chatbot() {
     setSelected(null);
   }
 
-  function handleClickQuestion(idx) {
-    setSelected(selected === idx ? null : idx);
-    setInput(QUESTIONS[idx].question);
-  }
-
   return (
     <div className="chatbot-box" style={{display: 'flex', flexDirection: 'column', height: 420, minWidth: 340, position: 'relative'}}>
       <h3 className="chatbot-title">Chatbot Hỗ Trợ</h3>
       <div style={{flex: 1, overflowY: 'auto', paddingBottom: 12}}>
-        {selected !== null && (
+        {selected !== null && false && (
           <div className="chatbot-answer" style={{marginBottom: 10}}>{QUESTIONS[selected].answer}</div>
         )}
         {history.length > 0 && (
@@ -94,16 +89,31 @@ export default function Chatbot() {
           <span role="img" aria-label="quick-questions">💡</span>
         </button>
         {showQuick && (
-          <div className="chatbot-quick-questions" style={{display: 'flex', flexDirection: 'column', gap: 8, background: '#f6f6f6', borderRadius: 12, padding: 10, boxShadow: '0 2px 8px #eee', position: 'absolute', bottom: 60, left: 0, right: 0, zIndex: 2, maxHeight: 220, overflowY: 'auto'}}>
-            {QUESTIONS.map((item, idx) => (
+          <div className="chatbot-quick-questions" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            background: '#f6f6f6',
+            borderRadius: 12,
+            padding: 10,
+            boxShadow: '0 2px 8px #eee',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            zIndex: 2,
+            maxHeight: 220,
+            overflowY: 'auto',
+            bottom: 60 // Đặt lại vị trí ngay phía trên input, không bị đẩy lên quá cao
+          }}>
+            {QUESTIONS.slice(0, 4).map((item, idx) => (
               <button
                 key={idx}
                 className="chatbot-quick-btn"
-                onClick={() => { handleClickQuestion(idx); setShowQuick(false); }}
+                onClick={() => { setInput(item.question); setShowQuick(false); }}
                 type="button"
                 style={{
-                  background: selected === idx ? '#1abc9c' : '#e8f9f4',
-                  color: selected === idx ? '#fff' : '#1abc9c',
+                  background: '#e8f9f4',
+                  color: '#1abc9c',
                   border: 'none',
                   borderRadius: 16,
                   padding: '7px 14px',

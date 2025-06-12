@@ -91,7 +91,6 @@ export default function AdminPage() {
                 <FaChartBar style={{marginRight: 8}} /> Thống kê
               </button>
             </li>
-            <li className="sidebar-section">Quản lý</li>
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/admin' ? ' active' : ''}`} onClick={() => navigate('/admin')}>
                 <span style={{marginRight: 8}}>📋</span> Đặt lịch khám
