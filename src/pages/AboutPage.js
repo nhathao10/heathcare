@@ -209,7 +209,7 @@ export default function AboutPage() {
           <Col md={8} data-aos="zoom-in">
             <div className="ratio ratio-16x9 rounded-4 shadow-lg overflow-hidden">
               <iframe
-                src="https://www.youtube.com/embed/2pLT-olgUJs"
+                src="https://www.youtube.com/embed/7LGsnH_URw0"
                 title="Video giới thiệu Trung tâm Y tế Cộng Đồng thực tế"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
