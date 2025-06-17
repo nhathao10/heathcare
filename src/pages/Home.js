@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom"; // ✅ Thêm dòng này
 import Chatbot from "./Chatbot";
-import { FaRobot } from 'react-icons/fa';
+import { FaRobot } from "react-icons/fa";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -100,7 +100,12 @@ export default function Home() {
         </button>
         {open && (
           <div className="floating-chatbot-popup">
-            <button className="close-chatbot-btn" onClick={() => setOpen(false)}>&times;</button>
+            <button
+              className="close-chatbot-btn"
+              onClick={() => setOpen(false)}
+            >
+              &times;
+            </button>
             <Chatbot />
           </div>
         )}
@@ -114,15 +119,29 @@ export default function Home() {
   useEffect(() => {
     async function fetchDoctors() {
       const querySnapshot = await getDocs(collection(db, "doctors"));
-      setDoctors(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setDoctors(
+        querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
     }
     async function fetchSpecialties() {
       const querySnapshot = await getDocs(collection(db, "specialties"));
-      setSpecialties(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setSpecialties(
+        querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
     }
     fetchDoctors();
     fetchSpecialties();
   }, []);
+
+  // State cho các công cụ tra cứu nhanh
+  const [quickToolTab, setQuickToolTab] = useState("bmi");
+  const [waterWeight, setWaterWeight] = useState("");
+  const [waterResult, setWaterResult] = useState("");
+  const [bmrWeight, setBmrWeight] = useState("");
+  const [bmrHeight, setBmrHeight] = useState("");
+  const [bmrAge, setBmrAge] = useState("");
+  const [bmrGender, setBmrGender] = useState("male");
+  const [bmrResult, setBmrResult] = useState("");
 
   return (
     <div className="home-wrapper">
@@ -165,7 +184,12 @@ export default function Home() {
               <li>Đội ngũ bác sĩ chuyên môn cao</li>
               <li>Dịch vụ nhanh chóng – an toàn – hiệu quả</li>
             </ul>
-            <Button className="glow-button mt-3" onClick={() => navigate("/gioi-thieu")}>Tìm hiểu thêm</Button>
+            <Button
+              className="glow-button mt-3"
+              onClick={() => navigate("/gioi-thieu")}
+            >
+              Tìm hiểu thêm
+            </Button>
           </Col>
         </Row>
       </Container>
@@ -231,35 +255,40 @@ export default function Home() {
           Đội ngũ bác sĩ
         </h2>
         <Row>
-          {doctors.length > 0 ? doctors.map((doctor, index) => (
-            <Col md={4} className="mb-4" key={doctor.id} data-aos="fade-up">
-              <Card className="doctor-card h-100 text-center shadow-lg">
-                <Card.Img
-                  variant="top"
-                  src={doctor.image || "/images.jpg"}
-                  className="doctor-img"
-                  alt={doctor.name}
-                />
-                <Card.Body>
-                  <Card.Title>{doctor.name}</Card.Title>
-                  <div className="text-secondary mb-2">
-                    {specialties.find(s => s.id === doctor.specialtyId)?.name || ""}
-                  </div>
-                  {doctor.workTime && (
-                    <div className="mb-1" style={{fontSize: '0.98rem'}}>
-                      <b>Thời gian làm việc:</b> {doctor.workTime}
+          {doctors.length > 0 ? (
+            doctors.map((doctor, index) => (
+              <Col md={4} className="mb-4" key={doctor.id} data-aos="fade-up">
+                <Card className="doctor-card h-100 text-center shadow-lg">
+                  <Card.Img
+                    variant="top"
+                    src={doctor.image || "/images.jpg"}
+                    className="doctor-img"
+                    alt={doctor.name}
+                  />
+                  <Card.Body>
+                    <Card.Title>{doctor.name}</Card.Title>
+                    <div className="text-secondary mb-2">
+                      {specialties.find((s) => s.id === doctor.specialtyId)
+                        ?.name || ""}
                     </div>
-                  )}
-                  {doctor.experience && (
-                    <div className="mb-2" style={{fontSize: '0.98rem'}}>
-                      <b>Kinh nghiệm:</b> {doctor.experience}
-                    </div>
-                  )}
-                </Card.Body>
-              </Card>
+                    {doctor.workTime && (
+                      <div className="mb-1" style={{ fontSize: "0.98rem" }}>
+                        <b>Thời gian làm việc:</b> {doctor.workTime}
+                      </div>
+                    )}
+                    {doctor.experience && (
+                      <div className="mb-2" style={{ fontSize: "0.98rem" }}>
+                        <b>Kinh nghiệm:</b> {doctor.experience}
+                      </div>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+          ) : (
+            <Col md={12} className="text-center text-muted">
+              Chưa có bác sĩ nào.
             </Col>
-          )) : (
-            <Col md={12} className="text-center text-muted">Chưa có bác sĩ nào.</Col>
           )}
         </Row>
       </Container>
@@ -271,51 +300,192 @@ export default function Home() {
         </h2>
         <Row className="justify-content-center">
           <Col md={6} lg={5}>
-            <Card className="shadow-sm p-3 mb-3">
-              <Card.Body>
-                <Card.Title className="mb-3">Tính chỉ số BMI</Card.Title>
-                <form onSubmit={calcBMI} className="d-flex flex-column gap-2">
-                  <div className="d-flex gap-2 align-items-center">
-                    <input
-                      type="number"
-                      min="80"
-                      max="250"
-                      className="form-control"
-                      placeholder="Chiều cao (cm)"
-                      value={bmiHeight}
-                      onChange={(e) => setBmiHeight(e.target.value)}
-                      required
-                    />
+            <div className="d-flex justify-content-center mb-3 gap-2">
+              <Button
+                className={`glow-button-tab ${quickToolTab === "bmi" ? "active" : ""}`}
+                style={{ minWidth: 120, borderRadius: 30, fontWeight: 600, fontSize: 20, background: quickToolTab === "bmi" ? "#20c997" : "#fff", color: quickToolTab === "bmi" ? "#fff" : "#20c997", border: `2px solid #20c997`, boxShadow: quickToolTab === "bmi" ? "0 2px 8px rgba(32,201,151,0.12)" : "none" }}
+                onClick={() => setQuickToolTab("bmi")}
+              >
+                BMI
+              </Button>
+              <Button
+                className={`glow-button-tab ${quickToolTab === "water" ? "active" : ""}`}
+                style={{ minWidth: 120, borderRadius: 30, fontWeight: 600, fontSize: 20, background: quickToolTab === "water" ? "#20c997" : "#fff", color: quickToolTab === "water" ? "#fff" : "#20c997", border: `2px solid #20c997`, boxShadow: quickToolTab === "water" ? "0 2px 8px rgba(32,201,151,0.12)" : "none" }}
+                onClick={() => setQuickToolTab("water")}
+              >
+                Lượng nước
+              </Button>
+              <Button
+                className={`glow-button-tab ${quickToolTab === "bmr" ? "active" : ""}`}
+                style={{ minWidth: 120, borderRadius: 30, fontWeight: 600, fontSize: 20, background: quickToolTab === "bmr" ? "#20c997" : "#fff", color: quickToolTab === "bmr" ? "#fff" : "#20c997", border: `2px solid #20c997`, boxShadow: quickToolTab === "bmr" ? "0 2px 8px rgba(32,201,151,0.12)" : "none" }}
+                onClick={() => setQuickToolTab("bmr")}
+              >
+                BMR
+              </Button>
+            </div>
+            {quickToolTab === "bmi" && (
+              <Card className="shadow-sm p-3 mb-3">
+                <Card.Body>
+                  <Card.Title className="mb-3">Tính chỉ số BMI</Card.Title>
+                  <form onSubmit={calcBMI} className="d-flex flex-column gap-2">
+                    <div className="d-flex gap-2 align-items-center">
+                      <input
+                        type="number"
+                        min="80"
+                        max="250"
+                        className="form-control"
+                        placeholder="Chiều cao (cm)"
+                        value={bmiHeight}
+                        onChange={(e) => setBmiHeight(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="number"
+                        min="20"
+                        max="200"
+                        className="form-control"
+                        placeholder="Cân nặng (kg)"
+                        value={bmiWeight}
+                        onChange={(e) => setBmiWeight(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <Button type="submit" className="glow-button" style={{ borderRadius: 30, fontWeight: 600, fontSize: 20, background: "#20c997", border: "none" }}>
+                      Tính BMI
+                    </Button>
+                  </form>
+                  {bmiResult && (
+                    <div className="mt-3 text-center">
+                      <div>
+                        <b>BMI:</b> {bmiResult}
+                      </div>
+                      <div>
+                        <b>Kết luận:</b> {bmiMsg}
+                      </div>
+                    </div>
+                  )}
+                  {!bmiResult && bmiMsg && (
+                    <div className="mt-3 text-danger text-center">{bmiMsg}</div>
+                  )}
+                </Card.Body>
+              </Card>
+            )}
+            {quickToolTab === "water" && (
+              <Card className="shadow-sm p-3 mb-3">
+                <Card.Body>
+                  <Card.Title className="mb-3">Tính lượng nước cần uống</Card.Title>
+                  <form
+                    onSubmit={e => {
+                      e.preventDefault();
+                      setWaterResult((waterWeight * 0.03).toFixed(2));
+                    }}
+                    className="d-flex flex-column gap-2"
+                  >
                     <input
                       type="number"
                       min="20"
                       max="200"
                       className="form-control"
                       placeholder="Cân nặng (kg)"
-                      value={bmiWeight}
-                      onChange={(e) => setBmiWeight(e.target.value)}
+                      value={waterWeight}
+                      onChange={e => setWaterWeight(e.target.value)}
                       required
                     />
-                  </div>
-                  <Button type="submit" variant="info">
-                    Tính BMI
-                  </Button>
-                </form>
-                {bmiResult && (
-                  <div className="mt-3 text-center">
-                    <div>
-                      <b>BMI:</b> {bmiResult}
+                    <Button type="submit" className="glow-button" style={{ borderRadius: 30, fontWeight: 600, fontSize: 20, background: "#20c997", border: "none" }}>
+                      Tính lượng nước
+                    </Button>
+                  </form>
+                  {waterResult && (
+                    <div className="mt-3 text-center">
+                      <b>Bạn nên uống khoảng {waterResult} lít nước mỗi ngày.</b>
                     </div>
-                    <div>
-                      <b>Kết luận:</b> {bmiMsg}
+                  )}
+                </Card.Body>
+              </Card>
+            )}
+            {quickToolTab === "bmr" && (
+              <Card className="shadow-sm p-3 mb-3">
+                <Card.Body>
+                  <Card.Title className="mb-3">Tính calo nền (BMR)</Card.Title>
+                  <form
+                    onSubmit={e => {
+                      e.preventDefault();
+                      let bmr = 0;
+                      if (bmrGender === "male") {
+                        bmr =
+                          88.36 +
+                          13.4 * bmrWeight +
+                          4.8 * bmrHeight -
+                          5.7 * bmrAge;
+                      } else {
+                        bmr =
+                          447.6 +
+                          9.2 * bmrWeight +
+                          3.1 * bmrHeight -
+                          4.3 * bmrAge;
+                      }
+                      setBmrResult(bmr.toFixed(0));
+                    }}
+                    className="d-flex flex-column gap-2"
+                  >
+                    <div className="d-flex gap-2">
+                      <input
+                        type="number"
+                        min="20"
+                        max="200"
+                        className="form-control"
+                        placeholder="Cân nặng (kg)"
+                        value={bmrWeight}
+                        onChange={e => setBmrWeight(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="number"
+                        min="80"
+                        max="250"
+                        className="form-control"
+                        placeholder="Chiều cao (cm)"
+                        value={bmrHeight}
+                        onChange={e => setBmrHeight(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="number"
+                        min="10"
+                        max="120"
+                        className="form-control"
+                        placeholder="Tuổi"
+                        value={bmrAge}
+                        onChange={e => setBmrAge(e.target.value)}
+                        required
+                      />
                     </div>
-                  </div>
-                )}
-                {!bmiResult && bmiMsg && (
-                  <div className="mt-3 text-danger text-center">{bmiMsg}</div>
-                )}
-              </Card.Body>
-            </Card>
+                    <div className="d-flex gap-2">
+                      <select
+                        className="form-control"
+                        value={bmrGender}
+                        onChange={e => setBmrGender(e.target.value)}
+                        required
+                      >
+                        <option value="male">Nam</option>
+                        <option value="female">Nữ</option>
+                      </select>
+                    </div>
+                    <Button type="submit" className="glow-button" style={{ borderRadius: 30, fontWeight: 600, fontSize: 20, background: "#20c997", border: "none" }}>
+                      Tính BMR
+                    </Button>
+                  </form>
+                  {bmrResult && (
+                    <div className="mt-3 text-center">
+                      <b>BMR của bạn là {bmrResult} kcal/ngày</b>
+                      <div style={{ fontSize: 13, color: "#888" }}>
+                        (Lượng calo nền cần thiết để duy trì sự sống khi nghỉ ngơi)
+                      </div>
+                    </div>
+                  )}
+                </Card.Body>
+              </Card>
+            )}
           </Col>
         </Row>
       </Container>
@@ -371,16 +541,25 @@ export default function Home() {
         </h2>
         <Row>
           {[
-            "Chất lượng dịch vụ tuyệt vời, bác sĩ tận tâm.",
-            "Đăng ký nhanh chóng, không phải chờ lâu.",
-            "Cảm thấy yên tâm mỗi khi đến khám.",
-          ].map((feedback, index) => (
+            {
+              name: "Nguyễn Thị Mai",
+              feedback: "Chất lượng dịch vụ tuyệt vời, bác sĩ tận tâm.",
+            },
+            {
+              name: "Lê Văn Hùng",
+              feedback: "Đăng ký nhanh chóng, không phải chờ lâu.",
+            },
+            {
+              name: "Phạm Minh Châu",
+              feedback: "Cảm thấy yên tâm mỗi khi đến khám.",
+            },
+          ].map((item, index) => (
             <Col md={4} className="mb-4" key={index} data-aos="zoom-in">
               <Card className="text-center shadow-sm border-success">
                 <Card.Body>
-                  <Card.Text>"{feedback}"</Card.Text>
+                  <Card.Text>"{item.feedback}"</Card.Text>
                   <Card.Footer className="text-muted">
-                    – Người dân Q. Y Tế
+                     {item.name}
                   </Card.Footer>
                 </Card.Body>
               </Card>

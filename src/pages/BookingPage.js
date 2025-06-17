@@ -117,10 +117,6 @@ const BookingPage = () => {
         <div className="navbar-brand">
           <Link to="/">Trung Tâm Y Tế Cộng Đồng</Link>
         </div>
-        <div className="navbar-links">
-          <Link to="/" className="nav-link">Trang Chủ</Link>
-          <Link to="/dat-lich" className="nav-link active">Đặt Lịch Khám</Link>
-        </div>
       </nav>
 
       {/* Container chính */}

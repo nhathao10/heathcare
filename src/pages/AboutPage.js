@@ -178,7 +178,7 @@ export default function AboutPage() {
           Cơ sở vật chất hiện đại
         </h2>
         <Row>
-          {["https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd21?auto=format&fit=crop&w=600&q=80"].map((img, idx) => (
+          {["https://images.unsplash.com/photo-1606206873764-fd15e242df52?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"].map((img, idx) => (
             <Col md={4} className="mb-4" key={idx} data-aos="zoom-in">
               <Card className="shadow-sm h-100">
                 <Card.Img variant="top" src={img} alt="Cơ sở vật chất" className="facility-img" />
@@ -192,7 +192,7 @@ export default function AboutPage() {
       <Container className="my-5">
         <h2 className="text-center text-gradient mb-5" data-aos="fade-up">Hoạt động cộng đồng</h2>
         <Row>
-          {["https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=600&q=80", "https://images.unsplash.com/photo-1512070679279-c2f999098c01?auto=format&fit=crop&w=600&q=80"].map((img, idx) => (
+          {["https://plus.unsplash.com/premium_photo-1683134055585-3d84cb07b60e?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1643321612557-57cef422f401?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1643321613180-68d62b93cb79?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"].map((img, idx) => (
             <Col md={4} className="mb-4" key={idx} data-aos="zoom-in">
               <Card className="shadow-sm h-100">
                 <Card.Img variant="top" src={img} alt="Hoạt động cộng đồng" className="facility-img" />
