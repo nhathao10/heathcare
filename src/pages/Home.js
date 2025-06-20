@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col, Button, Card, Tabs, Tab } from "react-bootstrap";
+import { Container, Row, Col, Button, Card, Tabs, Tab, Modal } from "react-bootstrap";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./Home.css";
@@ -143,6 +143,49 @@ export default function Home() {
   const [bmrGender, setBmrGender] = useState("male");
   const [bmrResult, setBmrResult] = useState("");
 
+  // State cho popup dịch vụ nổi bật
+  const [selectedService, setSelectedService] = useState(null);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+
+  const serviceDetails = [
+    {
+      title: "Khám tổng quát",
+      img: "https://cdn-icons-png.flaticon.com/512/2965/2965567.png",
+      desc: "Chẩn đoán tổng thể – phát hiện sớm các bệnh lý thường gặp.",
+      detail: "Dịch vụ khám tổng quát giúp phát hiện sớm các vấn đề sức khỏe, kiểm tra toàn diện các chỉ số cơ thể, xét nghiệm máu, nước tiểu, đo huyết áp, tầm soát các bệnh lý phổ biến. Phù hợp cho mọi lứa tuổi, đặc biệt nên thực hiện định kỳ mỗi năm một lần."
+    },
+    {
+      title: "Tiêm chủng",
+      img: "https://cdn-icons-png.flaticon.com/512/2906/2906277.png",
+      desc: "Tiêm vắc-xin cho mọi lứa tuổi – an toàn, chuẩn quy trình.",
+      detail: "Cung cấp đầy đủ các loại vắc-xin cho trẻ em và người lớn, đảm bảo nguồn gốc rõ ràng, quy trình tiêm chủng an toàn, tư vấn lịch tiêm phù hợp từng độ tuổi và đối tượng."
+    },
+    {
+      title: "Tư vấn sức khỏe",
+      img: "https://cdn-icons-png.flaticon.com/512/3875/3875431.png",
+      desc: "Hướng dẫn phòng bệnh và hỗ trợ tâm lý, dinh dưỡng.",
+      detail: "Đội ngũ chuyên gia tư vấn về dinh dưỡng, tâm lý, phòng bệnh, xây dựng lối sống lành mạnh, hỗ trợ giải đáp các thắc mắc về sức khỏe cho cá nhân và gia đình."
+    },
+    {
+      title: "Xét nghiệm",
+      img: "https://cdn-icons-png.flaticon.com/512/3275/3275643.png",
+      desc: "Đa dạng các loại xét nghiệm – chính xác, nhanh chóng.",
+      detail: "Thực hiện các xét nghiệm máu, nước tiểu, sinh hóa, miễn dịch, tầm soát ung thư... với trang thiết bị hiện đại, trả kết quả nhanh, chính xác, bảo mật thông tin."
+    },
+    {
+      title: "Cấp cứu & sơ cứu",
+      img: "https://cdn-icons-png.flaticon.com/512/6126/6126636.png",
+      desc: "Hỗ trợ kịp thời các tình huống khẩn cấp trong cộng đồng.",
+      detail: "Đội ngũ y tế trực cấp cứu 24/7, xử lý nhanh các ca chấn thương, tai nạn, sơ cứu ban đầu, chuyển viện an toàn khi cần thiết."
+    },
+    {
+      title: "Khám tại nhà",
+      img: "https://cdn-icons-png.flaticon.com/512/1828/1828919.png",
+      desc: "Dịch vụ tận nơi dành cho người cao tuổi hoặc khó di chuyển.",
+      detail: "Bác sĩ và điều dưỡng đến tận nhà thăm khám, lấy mẫu xét nghiệm, tư vấn điều trị, chăm sóc sức khỏe cho người cao tuổi, người bệnh không tiện di chuyển."
+    }
+  ];
+
   return (
     <div className="home-wrapper">
       {/* Header */}
@@ -200,40 +243,16 @@ export default function Home() {
           Dịch vụ nổi bật
         </h2>
         <Row>
-          {[
-            {
-              title: "Khám tổng quát",
-              img: "https://cdn-icons-png.flaticon.com/512/2965/2965567.png",
-              desc: "Chẩn đoán tổng thể – phát hiện sớm các bệnh lý thường gặp.",
-            },
-            {
-              title: "Tiêm chủng",
-              img: "https://cdn-icons-png.flaticon.com/512/2906/2906277.png",
-              desc: "Tiêm vắc-xin cho mọi lứa tuổi – an toàn, chuẩn quy trình.",
-            },
-            {
-              title: "Tư vấn sức khỏe",
-              img: "https://cdn-icons-png.flaticon.com/512/3875/3875431.png",
-              desc: "Hướng dẫn phòng bệnh và hỗ trợ tâm lý, dinh dưỡng.",
-            },
-            {
-              title: "Xét nghiệm",
-              img: "https://cdn-icons-png.flaticon.com/512/3275/3275643.png",
-              desc: "Đa dạng các loại xét nghiệm – chính xác, nhanh chóng.",
-            },
-            {
-              title: "Cấp cứu & sơ cứu",
-              img: "https://cdn-icons-png.flaticon.com/512/6126/6126636.png",
-              desc: "Hỗ trợ kịp thời các tình huống khẩn cấp trong cộng đồng.",
-            },
-            {
-              title: "Khám tại nhà",
-              img: "https://cdn-icons-png.flaticon.com/512/1828/1828919.png",
-              desc: "Dịch vụ tận nơi dành cho người cao tuổi hoặc khó di chuyển.",
-            },
-          ].map((service, index) => (
+          {serviceDetails.map((service, index) => (
             <Col md={4} className="mb-4" key={index} data-aos="flip-left">
-              <Card className="service-card h-100 text-center shadow-lg">
+              <Card
+                className="service-card h-100 text-center shadow-lg service-clickable"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setSelectedService(service);
+                  setShowServiceModal(true);
+                }}
+              >
                 <Card.Img
                   variant="top"
                   src={service.img}
@@ -248,6 +267,23 @@ export default function Home() {
           ))}
         </Row>
       </Container>
+
+      {/* Modal chi tiết dịch vụ nổi bật */}
+      <Modal show={showServiceModal} onHide={() => setShowServiceModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedService?.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <img src={selectedService?.img} alt={selectedService?.title} style={{ width: "100px", display: "block", margin: "0 auto 16px" }} />
+          <div className="mb-2"><b>Mô tả:</b> {selectedService?.desc}</div>
+          <div><b>Chi tiết:</b> {selectedService?.detail}</div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowServiceModal(false)}>
+            Đóng
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Đội ngũ bác sĩ */}
       <Container className="my-5">
