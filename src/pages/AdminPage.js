@@ -11,8 +11,12 @@ export default function AdminPage() {
   const [error, setError] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
+  const [showProtect, setShowProtect] = useState(true);
+  const [protectCode, setProtectCode] = useState("");
+  const [protectError, setProtectError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const PROTECT_CODE = "1111"; // Bạn có thể đổi mã này
 
   async function fetchBookings() {
     setLoading(true);
@@ -30,6 +34,25 @@ export default function AdminPage() {
   useEffect(() => {
     fetchBookings();
   }, []);
+
+  // Bỏ sessionStorage để lần nào vào cũng phải nhập mã bảo vệ
+  // useEffect(() => {
+  //   if (window.sessionStorage.getItem("admin_protected") === "ok") {
+  //     setShowProtect(false);
+  //   }
+  // }, []);
+
+  // Luôn hiển thị form nhập mã bảo vệ khi vào trang
+  function handleProtectSubmit(e) {
+    e.preventDefault();
+    if (protectCode === PROTECT_CODE) {
+      setShowProtect(false);
+      setProtectError("");
+    } else {
+      setProtectError("Mã bảo vệ không đúng!");
+      setTimeout(() => navigate("/"), 1200);
+    }
+  }
 
   async function handleDelete(id) {
     if (!window.confirm("Bạn có chắc muốn xóa lịch này?")) return;
@@ -72,6 +95,27 @@ export default function AdminPage() {
     }
   }
 
+  if (showProtect) {
+    return (
+      <div className="admin-protect-wrapper" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8f9fa" }}>
+        <form onSubmit={handleProtectSubmit} className="admin-protect-form" style={{ background: "#fff", padding: 32, borderRadius: 16, boxShadow: "0 2px 16px rgba(0,0,0,0.08)", minWidth: 320 }}>
+          <h3 className="mb-3 text-gradient">Nhập mã bảo vệ</h3>
+          <input
+            type="password"
+            className="form-control mb-3"
+            placeholder="Nhập mã bảo vệ..."
+            value={protectCode}
+            onChange={e => setProtectCode(e.target.value)}
+            autoFocus
+            required
+          />
+          <button type="submit" className="glow-button w-100" style={{ borderRadius: 30, fontWeight: 600, fontSize: 18, background: "#20c997", border: "none" }}>Xác nhận</button>
+          {protectError && <div className="text-danger mt-2 text-center">{protectError}</div>}
+        </form>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-layout">
       {/* Sidebar menu luôn hiển thị, không cần đóng/mở */}
@@ -80,7 +124,7 @@ export default function AdminPage() {
           <span className="sidebar-logo">Open <b>Admin</b></span>
         </div>
         <nav className="sidebar-nav">
-          <ul>
+          <ul style={{padding: 0, margin: 0, listStyle: 'none'}}>
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/' ? ' active' : ''}`} onClick={() => navigate('/') }>
                 <FaHome style={{marginRight: 8}} /> Trang chủ

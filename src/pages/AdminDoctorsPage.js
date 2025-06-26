@@ -88,12 +88,13 @@ export default function AdminDoctorsPage() {
 
   return (
     <div className="admin-layout">
+      {/* Sidebar menu luôn hiển thị, không cần đóng/mở */}
       <aside className="admin-sidebar-pro static">
         <div className="sidebar-header">
           <span className="sidebar-logo">Open <b>Admin</b></span>
         </div>
         <nav className="sidebar-nav">
-          <ul>
+          <ul style={{padding: 0, margin: 0, listStyle: 'none'}}>
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/' ? ' active' : ''}`} onClick={() => navigate('/') }>
                 <FaHome style={{marginRight: 8}} /> Trang chủ
@@ -104,7 +105,6 @@ export default function AdminDoctorsPage() {
                 <FaChartBar style={{marginRight: 8}} /> Thống kê
               </button>
             </li>
-            <li className="sidebar-section">Quản lý</li>
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/admin' ? ' active' : ''}`} onClick={() => navigate('/admin')}>
                 <span style={{marginRight: 8}}>📋</span> Đặt lịch khám

@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { Pie } from "react-chartjs-2";
 import "chart.js/auto";
 import "./AdminPage.css";
-import { FaHome, FaChartBar } from 'react-icons/fa';
+import { FaHome, FaChartBar, FaStethoscope, FaUserMd } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function AdminStatsPage() {
@@ -49,12 +49,13 @@ export default function AdminStatsPage() {
 
   return (
     <div className="admin-layout">
+      {/* Sidebar menu luôn hiển thị, không cần đóng/mở */}
       <aside className="admin-sidebar-pro static">
         <div className="sidebar-header">
           <span className="sidebar-logo">Open <b>Admin</b></span>
         </div>
         <nav className="sidebar-nav">
-          <ul>
+          <ul style={{padding: 0, margin: 0, listStyle: 'none'}}>
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/' ? ' active' : ''}`} onClick={() => navigate('/') }>
                 <FaHome style={{marginRight: 8}} /> Trang chủ
@@ -65,10 +66,19 @@ export default function AdminStatsPage() {
                 <FaChartBar style={{marginRight: 8}} /> Thống kê
               </button>
             </li>
-            <li className="sidebar-section">Quản lý</li>
             <li>
               <button className={`sidebar-menu-btn${location.pathname === '/admin' ? ' active' : ''}`} onClick={() => navigate('/admin')}>
                 <span style={{marginRight: 8}}>📋</span> Đặt lịch khám
+              </button>
+            </li>
+            <li>
+              <button className={`sidebar-menu-btn${location.pathname === '/admin/specialties' ? ' active' : ''}`} onClick={() => navigate('/admin/specialties')}>
+                <FaStethoscope style={{marginRight: 8}} /> Quản lý chuyên khoa
+              </button>
+            </li>
+            <li>
+              <button className={`sidebar-menu-btn${location.pathname === '/admin/doctors' ? ' active' : ''}`} onClick={() => navigate('/admin/doctors')}>
+                <FaUserMd style={{marginRight: 8}} /> Quản lý bác sĩ
               </button>
             </li>
           </ul>
